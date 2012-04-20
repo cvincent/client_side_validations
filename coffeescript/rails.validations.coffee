@@ -60,7 +60,13 @@ $.fn.isValid = (validators) ->
   if obj.is('form')
     validateForm(obj, validators)
   else
-    validateElement(obj, validators[@[0].name])
+    condition_func = obj.data("validate-if")
+
+    if condition_func
+      if validators.conditions[condition_func]()
+        validateElement(obj, validators[@[0].name])
+    else
+      validateElement(obj, validators[@[0].name])
 
 validateForm = (form, validators) ->
   form.trigger('form:validate:before')
